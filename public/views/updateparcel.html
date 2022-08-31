@@ -1,26 +1,28 @@
 <html>
     <head>
-        <link rel="stylesheet" href = "style.css" />
+        <title>Update Parcel</title>
         <link rel="stylesheet" href = "./css/bootstrap.min.css" />
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
         <div class="jumbotron text-center">
-            <h2>POMS</h2>
-            <p>Welcome to POMS Webpage:)</p>
+            <h2>Update Parcels</h2>
         </div>
         <a type="button" class="btn btn-primary btn-lg" href="/">Home</a>
         <a type="button" class="btn btn-primary btn-lg" href="/getparcels">List Parcels</a>
         <a type="button" class="btn btn-primary btn-lg" href="/updateparcel">Update Parcel</a>
         <a type="button" class="btn btn-primary btn-lg" href="/deleteparcel">Delete Parcel</a>
 
-        <form action="/addnewparcel" method="POST">
-            Sender <input type="text"  name="sender" /> </br>
-            Address <input type="text"  name="address" /> </br>
-            Weight <input type="number"  name="weight" /> </br>
-            Fragile <input type="text"  name="fragile" /> </br>
+        <form action="/updateparceldata" method="POST">
+
+            ID <input type="text"  name="id" /> </br>
+            New Sender <input type="text"  name="nsender" /> </br>
+            New Address <input type="text"  name="naddress" /> </br>
+            Weight <input type="number"  name="nweight" /> </br>
+            Fragile <input type="text" name="nfragile" /> </br>
             <input type="submit" value="Submit" /> </br>
         </form>
-        
+
     </body>
 </html>

@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>List of Parcels</title>
+        <link rel="stylesheet" href = "./css/bootstrap.min.css" />
+        <link rel="stylesheet" href="style.css">
+      </head>
+      
+        <body>
+            <div class="jumbotron text-center">
+                <h2>List Parcels</h2>
+            </div>
+            <a type="button" class="btn btn-primary btn-lg" href="/">Home</a>
+            <a type="button" class="btn btn-primary btn-lg" href="/getparcels">List Parcels</a>
+            <a type="button" class="btn btn-primary btn-lg" href="/updateparcel">Update Parcel</a>
+            <a type="button" class="btn btn-primary btn-lg" href="/deleteparcel">Delete Parcel</a>
+      
+        <div class="container">
+          <table class="table table-hover">
+              <tr>
+                <td>ID</td>
+                <td>Sender</td>
+                <td>Address</td>
+                <td>Weight</td>
+                <td>Fragile</td>
+              </tr>
+              <% for (let i=0;i<parcelsDb.length;i++){ %>
+                <tr>
+                    <td><%= parcelsDb[i]._id %> </td>
+                    <td><%= parcelsDb[i].sender %> </td>
+                    <td> <%= parcelsDb[i].address %> </td>
+                    <td><%= parcelsDb[i].weight %></td>
+                    <td><%= parcelsDb[i].fragile %></td>
+                </tr>
+                <%}%>
+        </table>
+        </div>
+      
+      </body>
+      
+</html>
