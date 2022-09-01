@@ -1,28 +1,21 @@
 <html>
     <head>
-        <title>Update Parcel</title>
+        <title>Delete Parcel</title>
         <link rel="stylesheet" href = "./css/bootstrap.min.css" />
         <link rel="stylesheet" href="style.css">
     </head>
-
     <body>
         <div class="jumbotron text-center">
-            <h2>Update Parcels</h2>
+            <h2>Delete All Parcels by Fragile</h2>
         </div>
         <a type="button" class="btn btn-primary btn-lg" href="/">Home</a>
         <a type="button" class="btn btn-primary btn-lg" href="/getparcels">List Parcels</a>
         <a type="button" class="btn btn-primary btn-lg" href="/updateparcel">Update Parcel</a>
         <a type="button" class="btn btn-primary btn-lg" href="/deleteparcel">Delete Parcel</a>
 
-        <form action="/updateparceldata" method="POST">
-
-            ID <input type="text"  name="id" /> </br>
-            New Sender <input type="text"  name="sender" /> </br>
-            New Address <input type="text"  name="address" /> </br>
-            Weight <input type="number"  name="weight" /> </br>
-            Fragile <input type="text" name="fragile" /> </br>
+        <form action="/deletebyfragile" method="POST">
+            Fragile <input type="text"  name="fragile" /> </br>
             <input type="submit" value="Submit" /> </br>
         </form>
-
     </body>
 </html>

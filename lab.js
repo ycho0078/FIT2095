@@ -20,9 +20,10 @@ app.use(express.static("public/css"));
 app.listen(8080);
 
 const url = 'mongodb://localhost:27017/lab6DB'
-const Parcel = require('./models/parcel');
+const Parcel = require('./model/parcel');
 const { default: mongoose } = require("mongoose");
-//const { off } = require("process");
+const { off } = require("process");
+const parcel = require("./model/parcel");
 mongoose.connect(url, function(err){
     if(err){
         console.log(err);
@@ -32,7 +33,7 @@ mongoose.connect(url, function(err){
 })
 
 app.get("/", function (req, res) {
-    res.sendFile(__dirname + "/views/index.html");
+    res.sendFile(__dirname +"/public/views/index.html");
   });
 
 app.post("/addnewparcel", function(req,res){
@@ -41,7 +42,7 @@ app.post("/addnewparcel", function(req,res){
         sender: parcelDetails.sender,
         address: parcelDetails.address,
         weight: parcelDetails.weight,
-        fragile: paracelDetails.fragile
+        fragile: parcelDetails.fragile
     })
     newParcel.save(function(err){
         if(err)
@@ -52,63 +53,93 @@ app.post("/addnewparcel", function(req,res){
 });
 
 app.get("/getparcels",function(req,res){
-    Parcel.find({})
-    .toArray(function (err, data) {
-      res.render(path.join(__dirname,"views/listparcels.html"), { parcelsDb: data });
-    });
+    Parcel.find({},function (err, data) {
+        res.render(__dirname +"/public/views/listparcels.html", { parcelsDb: data });
+      });
 });
 
 app.get("/updateparcel",function(req,res){
-    res.sendFile(path.join(__dirname,"views/updateparcel.html"));
+    res.sendFile(__dirname +"/public/views/updateparcel.html");
 });
 
 app.post("/updateparceldata",function(req,res){
     let parcelDetails = req.body;
-    let filter = {_id: mongoose.Types.ObjectId(parcelDetails._id)}
+    let filter = {_id: mongoose.Types.ObjectId(parcelDetails.id)}
     let theUpdate = {
         $set: {
-          sender: parcelDetails.nsender,
-          address: parcelDetails.naddress,
-          weight: parcelDetails.nweight,
-          fragile: parcelDetails.nfragile
+          sender: parcelDetails.sender,
+          address: parcelDetails.address,
+          weight: parcelDetails.weight,
+          fragile: parcelDetails.fragile
         }
       };
-    Parcel.updateOne(filter,theUpdate);
+    Parcel.updateOne(filter,theUpdate).exec();
     res.redirect("/getparcels");
 });
 
 app.get("/deleteparcel",function(req,res){
-    res.sendFile(path.join(__dirname,"views/deleteparcel.html"));
+    res.sendFile(__dirname +"/public/views/deleteparcel.html");
 });
 
 app.post("/deleteparceldata",function(req,res){
-    let parcelDetails = req.body;
-    let filter = {_id: mongoose.Types.ObjectId(parcelDetails._id)};
-    Parcel.deleteOne(filter);
+    let parcelID = req.body;
+    let filter = {_id: mongoose.Types.ObjectId(parcelID._id)};
+    Parcel.find({filter}).deleteOne().exec();
     res.redirect("/getparcels");
 })
 
 app.get("/getparcelbysender",function(req,res){
-    res.sendFile(path.join(__dirname,"views/listbysender.html"));
+    res.sendFile(__dirname +"/public/views/listbysender.html");
 });
 
 app.post("/postparceldatabysender",function(req,res){
-    let filter = req.body.sender;
-    Parcel.find({filter})
-    .toArray(function (err, data) {
-      res.render(path.join(__dirname,"views/listparcels.html"), { parcelsDb: data });
-    });
+    let filter = {sender:req.body.sender};
+    Parcel.find(filter).exec(function(err,data){
+        if(err){console.log(err);}
+        res.render(__dirname +"/public/views/listparcels.html", { parcelsDb: data });
+      });
 });
 
 app.get("/getparcelbyweight",function(req,res){
-    res.sendFile(path.join(__dirname,"views/listbyweight.html"));
+    res.sendFile(__dirname +"/public/views/listbyweight.html");
 })
 
 app.post("/postparceldatabyweight", function(req,res){
-    let max = req.body.weight-max;
-    let min = req.body.weight-min;
+    let max = req.body.max;
+    let min = req.body.min;
     Parcel.where('weight').gte(min).lte(max).exec(function(err,data){
+        console.log(min);
+        console.log(max);
         if(err) throw err;
-        res.render(path.join(__dirname,"views/listparcels.html"), { parcelsDb: data });
+        res.render(__dirname +"/public/views/listparcels.html", { parcelsDb: data });
     })
+})
+
+app.get("/deleteall",function(req,res){
+    res.sendFile(__dirname + "/public/views/deleteall.html");
+})
+
+app.get("/deleteallbyweight",function(req,res){
+    res.sendFile(__dirname+"/public/views/deleteallbyweight.html")
+})
+app.post("/deletebyweight",function(req,res){
+    let filter = {weight : req.body.weight};
+    Parcel.find(filter).remove().exec();
+    res.redirect("/getparcels");
+})
+app.get("/address",function(req,res){
+    res.sendFile(__dirname+"/public/views/address.html")
+})
+app.post("/deletebyaddress",function(req,res){
+    let filter = { address : req.body.address};
+    Parcel.find(filter).remove().exec();
+    res.redirect("/getparcels");
+})
+app.get("/deleteallbyfragile",function(req,res){
+    res.sendFile(__dirname+"/public/views/deleteallbyfragile.html")
+})
+app.post("/deletebyfragile",function(req,res){
+    let filter = {fragile : req.body.fragile};
+    Parcel.find(filter).remove().exec();
+    res.redirect("/getparcels");
 })

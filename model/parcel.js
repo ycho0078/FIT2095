@@ -10,7 +10,7 @@ const parcelSchema = mongoose.Schema({
         },
         message:'Invalid Weight'}
     },
-    fragile: {type: String, default: "No"}
+    fragile: {type: String}
 });
 
 module. exports =mongoose.model('Parcel', parcelSchema);
